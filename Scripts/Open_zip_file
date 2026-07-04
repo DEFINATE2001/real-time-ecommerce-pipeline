@@ -1,0 +1,30 @@
+import zipfile
+import pandas as pd
+from pathlib import Path
+
+zip_path = Path("data/raw/canadian_retail_prices.zip")
+extract_path = Path("data/raw/canadian_retail_prices")
+
+extract_path.mkdir(parents=True, exist_ok=True)
+
+with zipfile.ZipFile(zip_path, "r") as zip_ref:
+    zip_ref.extractall(extract_path)
+
+print("Files extracted:")
+for file in extract_path.iterdir():
+    print(file.name)
+
+csv_files = list(extract_path.glob("*.csv"))
+
+if csv_files:
+    df = pd.read_csv(csv_files[0])
+    print("\nFirst 5 rows:")
+    print(df.head())
+
+    print("\nColumns:")
+    print(df.columns.tolist())
+
+    print("\nShape:")
+    print(df.shape)
+else:
+    print("No CSV file found.")
